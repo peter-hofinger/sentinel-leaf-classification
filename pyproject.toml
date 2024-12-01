@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slc"
+version = "1.0.0"
+dependencies = [
+  "aiohttp",
+  "dask[dataframe,distributed]",
+  "defusedxml",
+  "dill",
+  "earthengine-api",
+  "eemont",
+  "geopandas",
+  "ipykernel",
+  "ipywidgets",
+  "loguru",
+  "rasterio",
+  "matplotlib",
+  "nest_asyncio",
+  "numpy",
+  "optuna",
+  "pandas",
+  "pqdm",
+  "pyproj",
+  "requests",
+  "scikit-elm@git+https://github.com/akusok/scikit-elm.git",
+  "scikit-learn",
+  "SciencePlots",
+  "seaborn",
+  "tqdm",
+  "typeguard",
+  "utm",
+  "xgboost",
+]
+requires-python = ">=3.10"
+authors = [
+  {name = "Peter Hofinger", email = "hofinger-peter@gmx.de"},
+]
+maintainers = [
+  {name = "Peter Hofinger", email = "hofinger-peter@gmx.de"},
+]
+description = "Classify leaf type using tailored sentinel-2 composites."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["remote-sensing", "leaf-type", "sentinel", "sentinel-2", "google-earth-engine"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python"
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+lint = ["ruff"]
+
+[project.urls]
+Repository = "https://github.com/peter-hofinger/sentinel-leaf-classification"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "E501",  # line too long
+  "COM812",  # missing trailing comma
+]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]  # speed up

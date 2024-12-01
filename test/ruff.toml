@@ -1,0 +1,15 @@
+extend = "../pyproject.toml"
+lint.ignore = [
+    "ANN001",  # arg type annotation
+    "ANN002",  # args annotation
+    "ANN003",  # kwargs annotation
+    "ANN201",  # return type
+    "ANN202",  # private return type
+    "D100",  # module docstring
+    "D101",  # class docstring
+    "D102",  # method docstring
+    "D103",  # function docstring
+    "D104",  # package docstring missing
+    "PLR2004",  # magic number
+    "S101",  # use of assert
+]
