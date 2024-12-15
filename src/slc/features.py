@@ -543,8 +543,8 @@ def show_similarity_matrix(
     ax.set_yticklabels(similarity_matrix.columns)
 
     ax.set_title("Similarity Matrix")
-    ax.set_xlabel("Band")
-    ax.set_ylabel("Band")
+    ax.set_xlabel("Feature")
+    ax.set_ylabel("Feature")
 
     return ax
 

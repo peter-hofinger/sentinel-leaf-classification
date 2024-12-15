@@ -1,9 +1,9 @@
 Sentinel Leaf Classification
 ==============================
 
-> Disclaimer: This repository is a work in progress and the corresponding paper has not been published yet. The code is subject to change.
+> **Disclaimer:** This repository is a work in progress and the corresponding paper has not been published yet. The code is subject to change.
 
-Welcome to the repository for the paper "Evergreen Leaf Classification Using Tailored Sentinel-2 Composites." Our goal is to ensure all results are reproducible. If you encounter any problems, please open an issue in this repository.
+Welcome to the repository for the paper "Temporal Generalization In Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites." Our goal is to ensure all results are reproducible. If you encounter any problems, please open an issue in this repository.
 
 # Overview
 
@@ -27,6 +27,8 @@ uv pip install -e '.[test,lint]'
 ```
 
 To use the **Earth Engine API**, authenticate with `python -c "import ee;ee.Authenticate()"`. A browser tab should open after you execute the code. After following the website instructions you can use the API. Repeat this process whenever your token expires.
+
+You can request the test set at [https://forestgeo.si.edu/sites/europe/traunstein](https://forestgeo.si.edu/sites/europe/traunstein) (accessed on December 7, 2024). You will need to convert it to the same CSV format as the training set, with coordinates in [EPSG:4326](https://epsg.io/4326).
 
 # Usage
 
@@ -70,7 +72,13 @@ The code was formatted automatically using following VS Code settings alongside 
 
 # Acknowledgements
 
-We would like to thank all the contributors and reviewers for their valuable feedback and support.
+We sincerely thank Norbert Wimmer for his valuable intellectual contributions to this research. While he opted not to be listed as an author, his insights and support in fostering these ideas were instrumental and are deeply appreciated.
+
+In addition, we acknowledge the contributors to the Bavarian strict forest reserve data, which served as the foundation for the training dataset used in this study. We are particularly grateful to the LWF, as well as Markus Blaschke and Bernhard Förster, for their decades of meticulous efforts in collecting, curating, and maintaining this invaluable dataset.
+
+We thank the LDBV and ForestGEO for providing the nDSM and the test dataset, respectively.
+
+This publication has been prepared using European Union's Copernicus Land Monitoring Service information; DOI: [https://doi.org/10.2909/7b28d3c1-b363-4579-9141-bdd09d073fd8](https://doi.org/10.2909/7b28d3c1-b363-4579-9141-bdd09d073fd8)
 
 # Contact
 
@@ -81,10 +89,10 @@ For questions or contributions, please contact Peter Hofinger at [hofinger-peter
 If you use this repository in your research, please cite our paper:
 
 ```
-@article{paper2024,
-  title={Paper Title},
-  author={Name and Coauthor Names},
-  journal={Journal Name},
+@article{Hofinger2024,
+  title={Temporal Generalization In Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites},
+  author={Peter Hofinger and Jan Dempewolf and Simon Ecke and Hans-Joachim Klemmt},
+  journal={xx},
   year={2024},
   volume={xx},
   number={xx},
