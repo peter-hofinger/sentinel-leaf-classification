@@ -26,7 +26,7 @@ dependencies = [
   "pyproj",
   "requests",
   "scikit-elm@git+https://github.com/akusok/scikit-elm.git",
-  "scikit-learn",
+  "scikit-learn<1.6.0",
   "SciencePlots",
   "seaborn",
   "tqdm",
