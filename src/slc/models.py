@@ -127,7 +127,7 @@ def _has_nan_error(
 
 
 @typechecked
-def _build_pipeline(
+def _build_pipeline(  # noqa: PLR0913
     model: ClassifierMixin,
     sampler: str | None,
     n_components: int | None,
