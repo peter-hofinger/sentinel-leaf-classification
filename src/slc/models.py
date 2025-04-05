@@ -27,18 +27,25 @@ Typical usage example:
     )
 """
 
+import importlib
+import inspect
+import pkgutil
 from collections.abc import Callable
 from datetime import datetime
+from functools import cache
 from pathlib import Path
 from time import sleep
 from typing import Any
 from zoneinfo import ZoneInfo
 
 import dill
+import imblearn
 import numpy as np
 import optuna
 import pandas as pd
 import rasterio
+from imblearn.base import BaseSampler
+from imblearn.pipeline import make_pipeline
 from loguru import logger
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.decomposition import PCA
@@ -52,7 +59,7 @@ from sklearn.model_selection import (
 )
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 from typeguard import typechecked
 
 from slc.data import (
@@ -121,7 +128,8 @@ def _has_nan_error(
 
 @typechecked
 def _build_pipeline(
-    model: BaseEstimator,
+    model: ClassifierMixin,
+    sampler: str | None,
     n_components: int | None,
     model_params: dict[str, Any],
     *,
@@ -142,7 +150,10 @@ def _build_pipeline(
             raise ValueError(msg)
         steps.append(("pca", PCA(n_components=n_components)))
 
-    steps.append(("model", model))
+    if sampler is not None:
+        steps.append(("model", make_pipeline(get_samplers()[sampler], model)))
+    else:
+        steps.append(("model", model))
 
     return Pipeline(steps=steps)
 
@@ -158,7 +169,7 @@ def _study2model(
     model_params = {
         param: value
         for param, value in study.best_params.items()
-        if param not in ["do_standardize", "do_pca", "n_components"]
+        if param not in ["do_standardize", "do_pca", "n_components", "sampler"]
     }
 
     n_components = None
@@ -167,6 +178,7 @@ def _study2model(
 
     best_model = _build_pipeline(
         model,
+        study.best_params["sampler"],
         n_components,
         model_params,
         do_standardize=study.best_params["do_standardize"],
@@ -182,7 +194,7 @@ def _study2model(
 
 @typechecked
 def _create_paths(
-    model: BaseEstimator,
+    model: ClassifierMixin,
     save_folder: str,
 ) -> tuple[Path, Path, Path]:
     save_path_obj = Path(save_folder)
@@ -338,6 +350,57 @@ def _create_composites(
                 logger.debug(str(e))
                 sleep(sleep_time)
                 sleep_time *= 2
+
+
+def _get_subclasses(package: Any, base_class: type) -> list:  # noqa: ANN401
+    classes = set()
+    for _, modname, _ in pkgutil.walk_packages(
+        package.__path__, package.__name__ + "."
+    ):
+        if ".test_" in modname:
+            continue
+        module = importlib.import_module(modname)
+
+        for _, obj in inspect.getmembers(module, inspect.isclass):
+            if not issubclass(obj, base_class):
+                continue
+
+            classes.add(obj)
+
+    return classes
+
+
+@cache
+def get_samplers() -> list:
+    """Get list of imblearn samplers tested for compatibility.
+
+    Returns:
+        A list of imblearn samplers. FunctionSampler() represents an identity sampler, returning the data without modification.
+
+    """
+    invalid_samplers = ["CondensedNearestNeighbour", "KMeansSMOTE"]
+
+    samplers = []
+    for sampler_class in _get_subclasses(imblearn, BaseSampler):
+        sampler = None
+        for kwargs in ({"random_state": 42}, {}):
+            try:
+                sampler = sampler_class(**kwargs)
+                break  # Use the first successful instantiation
+            except TypeError:
+                continue
+
+        if sampler is None:
+            continue
+
+        class_name = sampler_class.__name__
+        instance_name = sampler.__class__.__name__
+        if class_name == instance_name and instance_name not in invalid_samplers:
+            samplers.append(sampler)
+
+    samplers = sorted(samplers, key=lambda x: x.__class__.__name__)
+
+    return {sampler.__class__.__name__: sampler for sampler in samplers}
 
 
 @typechecked
@@ -500,7 +563,7 @@ def hyperparam_search(  # noqa: C901, PLR0913
                 dill.dump(study, file)
 
     def _objective(trial: optuna.trial.Trial) -> float:
-        # Choose whether to standardize and apply PCA
+        # Choose whether to standardize and apply PCA, select sampler
         standardize_options = [True, False]
         if always_standardize:
             standardize_options = [True]
@@ -508,6 +571,7 @@ def hyperparam_search(  # noqa: C901, PLR0913
             "do_standardize", standardize_options
         )
         do_pca = trial.suggest_categorical("do_pca", [True, False])
+        sampler = trial.suggest_categorical("sampler", get_samplers().keys())
 
         # Build pipeline
         n_components = None
@@ -526,6 +590,7 @@ def hyperparam_search(  # noqa: C901, PLR0913
         nonlocal model
         pipe = _build_pipeline(
             model,
+            sampler,
             n_components,
             params,
             do_standardize=do_standardize,
@@ -578,7 +643,7 @@ def hyperparam_search(  # noqa: C901, PLR0913
 
 @typechecked
 def cv_predict(
-    model: BaseEstimator,
+    model: ClassifierMixin,
     data_path: str | Path,
     target_path: str | Path,
     cv: int | BaseCrossValidator | None = None,

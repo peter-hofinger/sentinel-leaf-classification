@@ -31,7 +31,7 @@ from scipy.cluster.hierarchy import dendrogram, ward
 from scipy.spatial.distance import squareform
 from scipy.stats import spearmanr
 from sklearn.feature_selection import mutual_info_regression
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 from typeguard import typechecked
 
 from slc.data import split_band_name
@@ -584,7 +584,7 @@ def show_dendrogram(
     dendrogram(dist_linkage, labels=similarity_matrix.columns, ax=ax, leaf_rotation=90)
 
     ax.set_title("Dendrogram")
-    ax.set_xlabel("Band")
+    ax.set_xlabel("Feature")
     ax.set_ylabel("Distance")
 
     return ax

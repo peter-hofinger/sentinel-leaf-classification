@@ -34,7 +34,7 @@ import asyncio
 import datetime
 from collections import defaultdict
 from collections.abc import Coroutine
-from functools import lru_cache
+from functools import cache
 from http import HTTPStatus
 from itertools import product
 from numbers import Number
@@ -58,7 +58,7 @@ from defusedxml.ElementTree import parse
 from loguru import logger
 from pyproj import CRS
 from rasterio.io import MemoryFile
-from tqdm.notebook import tqdm
+from tqdm.auto import tqdm
 from typeguard import typechecked
 
 BROADLEAF_AREA = "Broadleaf Area"
@@ -71,15 +71,15 @@ LONGITUDE = "longitude"
 SCALE = 10  # Fine Sentinel-2 resolution in meters
 
 
+@cache
 @typechecked
 def _initialize_ee() -> None:
-    if not ee.data.is_initialized():
-        try:
-            ee.Initialize()
-        except ee.ee_exception.EEException:
-            logger.debug("Initializing Earth Engine API...")
-            ee.Authenticate()
-            ee.Initialize()
+    try:
+        ee.Initialize()
+    except ee.ee_exception.EEException:
+        logger.debug("Authenticating Earth Engine API...")
+        ee.Authenticate()
+        ee.Initialize()
 
 
 @typechecked
@@ -705,7 +705,7 @@ def _compute_target(
     for genus, fc in genus_dict.items():
         genus_areas[genus] = _compute_area(fc, SCALE, fine_scale, crs)
 
-    # Compute target (conifer proportion) from broadleaf_area and conifer_area
+    # Compute target
     target = next(iter(genus_areas.values()))
     total_area = next(iter(genus_areas.values()))
     for genus_area in list(genus_areas.values())[1:]:
@@ -718,7 +718,7 @@ def _compute_target(
     return target, (roi, SCALE, crs)
 
 
-@lru_cache
+@cache
 @typechecked
 def list_reducers(*, use_buffered_reducers: bool = True) -> list[str]:
     """List all valid reducers in the Earth Engine API.
@@ -806,7 +806,7 @@ def list_reducers(*, use_buffered_reducers: bool = True) -> list[str]:
     return reducers
 
 
-@lru_cache
+@cache
 @typechecked
 def list_reducer_bands(reducer: str) -> list[str] | None:
     """List all valid bands for a given reducer in the Earth Engine API.
@@ -834,7 +834,7 @@ def list_reducer_bands(reducer: str) -> list[str] | None:
     return [band_name.split("_", 1)[1] for band_name in band_names]
 
 
-@lru_cache
+@cache
 @typechecked
 def list_bands(*, level_2a: bool = True) -> list[str]:
     """List all valid Sentinel-2 bands offered by the Earth Engine API.
@@ -860,7 +860,7 @@ def list_bands(*, level_2a: bool = True) -> list[str]:
     return s2.first().bandNames().getInfo()
 
 
-@lru_cache
+@cache
 @typechecked
 def list_indices() -> list[str]:
     """List all valid indices for Sentinel-2 offered by eemont.
