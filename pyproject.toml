@@ -13,6 +13,7 @@ dependencies = [
   "earthengine-api",
   "eemont",
   "geopandas",
+  "imbalanced-learn",
   "ipykernel",
   "ipywidgets",
   "loguru",
