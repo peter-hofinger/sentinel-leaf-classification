@@ -34,7 +34,7 @@ dependencies = [
   "utm",
   "xgboost",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 authors = [
   {name = "Peter Hofinger", email = "hofinger-peter@gmx.de"},
 ]

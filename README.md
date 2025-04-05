@@ -18,7 +18,7 @@ Our results highlight the potential of tailored Sentinel-2 composites for classi
 
 # Installation and Setup
 
-This repository requires **Python 3.10** or later. To install the required packages we recommend using [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). Install all necessary packages by running the following commands in the root directory of this repository:
+This repository requires **Python 3.12** or later. To install the required packages we recommend using [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). Install all necessary packages by running the following commands in the root directory of this repository:
 
 ```bash
 mamba create -n slc -y xgboost uv
