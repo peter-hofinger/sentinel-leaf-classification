@@ -67,7 +67,6 @@ The code was formatted automatically using following VS Code settings alongside 
     },
     "editor.defaultFormatter": "charliermarsh.ruff",
 },
-"files.autoSave": "onFocusChange",
 ```
 
 # Acknowledgements
@@ -89,15 +88,11 @@ For questions or contributions, please contact Peter Hofinger at [hofinger-peter
 If you use this repository in your research, please cite our paper:
 
 ```
-@article{Hofinger2024,
-  title={Temporal Generalization In Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites},
-  author={Peter Hofinger and Jan Dempewolf and Simon Ecke and Hans-Joachim Klemmt},
-  journal={xx},
-  year={2024},
-  volume={xx},
-  number={xx},
-  pages={xx--xx},
-  doi={xx.xxxx/xxxxxx},
+@misc{Hofinger2025,
+   author = {Peter Hofinger and Jan Dempewolf and Simon Ecke and Hans-Joachim Klemmt},
+   doi = {10.2139/ssrn.5115677},
+   title = {Temporal Generalization in Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites},
+   year = {2025}
 }
 ```
 
