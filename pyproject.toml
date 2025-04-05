@@ -62,6 +62,8 @@ select = ["ALL"]
 ignore = [
   "E501",  # line too long
   "COM812",  # missing trailing comma
+  "D203", # incorrect blank line before class
+  "D213", # multi line summary second line
 ]
 
 [tool.ruff.lint.isort]
