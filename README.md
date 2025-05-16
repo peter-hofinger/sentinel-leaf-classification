@@ -1,9 +1,7 @@
 Sentinel Leaf Classification
 ==============================
 
-> **Disclaimer:** This repository is a work in progress and the corresponding paper has not been published yet. The code is subject to change.
-
-Welcome to the repository for the paper "Temporal Generalization In Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites." Our goal is to ensure all results are reproducible. If you encounter any problems, please open an issue in this repository.
+Welcome to the companion repository for [Temporal Generalization In Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites](https://doi.org/10.1016/j.ecoinf.2025.103167). Our goal is to ensure all results are reproducible. If you encounter any problems, please open an issue in this repository.
 
 # Overview
 
@@ -88,11 +86,14 @@ For questions or contributions, please contact Peter Hofinger at [hofinger-peter
 If you use this repository in your research, please cite our paper:
 
 ```
-@misc{Hofinger2025,
-   author = {Peter Hofinger and Jan Dempewolf and Simon Ecke and Hans-Joachim Klemmt},
-   doi = {10.2139/ssrn.5115677},
-   title = {Temporal Generalization in Evergreen Leaf Type Classification Using Tailored Sentinel-2 Composites},
-   year = {2025}
+@article{Hofinger2025,
+    title = {Temporal generalization in evergreen leaf type classification using tailored sentinel-2 composites},
+    journal = {Ecological Informatics},
+    pages = {103167},
+    year = {2025},
+    issn = {1574-9541},
+    doi = {https://doi.org/10.1016/j.ecoinf.2025.103167},
+    author = {Peter Hofinger and Jan Dempewolf and Simon Ecke and Hans-Joachim Klemmt}
 }
 ```
 
